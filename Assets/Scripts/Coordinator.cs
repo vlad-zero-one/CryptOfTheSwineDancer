@@ -15,8 +15,6 @@ public class Coordinator : MonoBehaviour
 
     private Dictionary<Coordinates, GameObject> coordinatesDict = new Dictionary<Coordinates, GameObject>();
 
-    bool once = true;
-
     void Awake()
     {
         if (worldGrid.childCount != worldSettings.Rows || worldGrid.GetChild(0).childCount != worldSettings.CellsInRow)
@@ -53,6 +51,21 @@ public class Coordinator : MonoBehaviour
         gridPlacer.Place(obj, coordinates);
     }
 
+    public void BombExplode(Coordinates coordinates)
+    {
+        for (int x = -1; x < 2; x++)
+        {
+            for (int y = -1; y < 2; y++)
+            {
+                var cord = new Coordinates((uint)((int)coordinates.x + x), (uint)((int)coordinates.y + y));
+                if (coordinatesDict.ContainsKey(cord))
+                {
+                    Destroy(coordinatesDict[cord]);
+                }
+            }
+        }
+    }
+
     public void Move(GameObject obj, Coordinates coordinates)
     {
 
@@ -60,30 +73,14 @@ public class Coordinator : MonoBehaviour
         {
             var oldCoordinates = coordinatesDict.FirstOrDefault(x => x.Value == obj).Key;
 
-            //Debug.Log(oldCoordinates.x + " " + oldCoordinates.y + " " + coordinatesDict[oldCoordinates]);
-
             SetCoordinates(obj, coordinates);
             coordinatesDict[oldCoordinates] = null;
-
-            //Debug.Log(oldCoordinates.x + " " + oldCoordinates.y + " " + coordinatesDict[oldCoordinates]);
         }
         
     }
 
-    public void GameOver()
+    public void GameOver(bool porkieDied = false)
     {
-        menu.GameOver();
-    }
-
-    private void Update()
-    {
-        if (once)
-        {
-            foreach(var cell in coordinatesDict)
-            {
-                Debug.Log(cell.Key.x + " " + cell.Key.y + " " + cell.Value);
-            }
-            once = false;
-        }
+        menu.GameOver(porkieDied: porkieDied);
     }
 }

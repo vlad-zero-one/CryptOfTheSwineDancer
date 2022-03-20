@@ -12,10 +12,11 @@ public class BaseEnemy : MonoBehaviour, ITickableObject
     private Direction currentDirection;
     private Coordinates coordinates;
 
-    private void Start()
+    public void Init(Coordinator coordinator, TickSystem tickSystem, Coordinates coordinates)
     {
-        coordinates = new Coordinates(5, 5);
-        coordinator.SetCoordinates(gameObject, coordinates);
+        this.coordinator = coordinator;
+        this.tickSystem = tickSystem;
+        this.coordinates = coordinates;
 
         SubscribeActionOnTick();
     }
@@ -91,5 +92,11 @@ public class BaseEnemy : MonoBehaviour, ITickableObject
     private void ChangeSpriteToAgressive()
     {
         return;
+    }
+
+    private void OnDestroy()
+    {
+        tickSystem.TickEvent += RandomMove;
+        tickSystem.LateTickEvent += LookUp;
     }
 }

@@ -9,8 +9,15 @@ public class MrPorkie : MonoBehaviour, ITickableObject
 
     [SerializeField] private Coordinator coordinator;
 
+    [SerializeField] private GameObject bombPrefab;
+
+    [SerializeField] private GameObject bombsInHierarchy;
+
     private Direction currentDirection;
     private Coordinates coordinates;
+
+    private bool bombPlaced = false;
+    private GameObject bomb;
 
     private void Start()
     {
@@ -47,7 +54,7 @@ public class MrPorkie : MonoBehaviour, ITickableObject
 
     public void PlaceBomb()
     {
-        SetDirection(Direction.Stay);
+        SetDirection(Direction.ToTheMoon);
     }
 
     private void MoveOrPlaceBomb()
@@ -67,26 +74,55 @@ public class MrPorkie : MonoBehaviour, ITickableObject
             case Direction.Right:
                 newCoordinates = new Coordinates(coordinates.x + 1, coordinates.y);
                 break;
+            case Direction.ToTheMoon:
+                InstantiateBomb();
+                break;
         }
         if (coordinator.CanMoveHere(newCoordinates))
         {
             coordinates = newCoordinates;
             coordinator.Move(gameObject, coordinates);
+            ActivateBomb();
         }
-        else
-            currentDirection = Direction.Stay;
+        else if (currentDirection == Direction.ToTheMoon)
+        {
 
+        }
+    }
+
+    private void InstantiateBomb()
+    {
+        if (!bombPlaced)
+        {
+            bomb = Instantiate(bombPrefab, transform.position, Quaternion.identity, bombsInHierarchy.transform);
+            bomb.GetComponent<Bomb>().PlaceBomb(coordinates);
+            bombPlaced = true;
+        }
+    }
+
+    private void ActivateBomb()
+    {
+        if (bombPlaced)
+        {
+            bomb.GetComponent<Bomb>().LightTheFuse(tickSystem, coordinator);
+            bombPlaced = false;
+        }
     }
 
     private void SetDirection(Direction dir)
     {
         currentDirection = dir;
     }
+
+    private void OnDestroy()
+    {
+        coordinator.GameOver(porkieDied: true);
+    }
 }
 
 enum Direction
 {
-    Stay,
+    ToTheMoon,
     Up,
     Down,
     Left,

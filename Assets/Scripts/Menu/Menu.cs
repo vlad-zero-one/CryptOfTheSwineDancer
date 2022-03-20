@@ -1,17 +1,16 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Menu : MonoBehaviour
 {
     [SerializeField] GameObject controlButtons;
-    [SerializeField] TickSystem tickSystem;
 
-    public void GameOver()
+    [SerializeField] GameObject continueButton;
+
+    public void GameOver(bool porkieDied = false)
     {
-        //tickSystem.Tick();
-
         gameObject.SetActive(true);
+        continueButton.SetActive(!porkieDied);
         controlButtons.SetActive(false);
     }
 
@@ -22,8 +21,7 @@ public class Menu : MonoBehaviour
 
     public void Restart()
     {
-        Continue();
-        return;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     public void Continue()
