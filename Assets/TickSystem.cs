@@ -10,6 +10,6 @@ public class TickSystem : MonoBehaviour
 
     public void Tick()
     {
-        TickEvent.Invoke();
+        TickEvent?.Invoke();
     }
 }
