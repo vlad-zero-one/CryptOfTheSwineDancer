@@ -1,4 +1,0 @@
-interface ITickableObject
-{
-    void ActionOnTick();
-}

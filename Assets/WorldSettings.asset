@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d1d3619a45695d42abd44c596126b53, type: 3}
   m_Name: WorldSettings
   m_EditorClassIdentifier: 
-  X: 17
-  Y: 9
+  Rows: 9
+  CellsInRow: 17

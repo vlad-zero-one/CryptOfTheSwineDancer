@@ -4,6 +4,6 @@ using UnityEngine;
 public class WorldSettings : ScriptableObject
 {
     [Header("Map Size")]
-    public uint X;
-    public uint Y;
+    public uint Rows;
+    public uint CellsInRow;
 }
