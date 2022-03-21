@@ -29,23 +29,33 @@ public class Bomb : MonoBehaviour, ITickableObject
 
     public void SubscribeActionOnTick()
     {
-        tickSystem.LateTickEvent += Kaboom;
+        tickSystem.LateTickEvent += StartTimer;
     }
 
-    private void Kaboom()
+    private void StartTimer()
     {
-        // на следующий тик после старта
-        if (timer + 1 == TICKS_TO_EXPLODE)
-        {
-            //coordinator.SetCoordinates(gameObject, coordinates);
-        }
         if (timer <= 0)
         {
-            coordinator.BombExplode(coordinates);
-
-            tickSystem.LateTickEvent -= Kaboom;
-            Destroy(gameObject);
+            ExplodeBomb();
         }
         timer--;
+    }
+
+    private void ExplodeBomb()
+    {
+        for (int x = -1; x < 2; x++)
+        {
+            for (int y = -1; y < 2; y++)
+            {
+                var cord = new Coordinates((uint)((int)coordinates.x + x), (uint)((int)coordinates.y + y));
+                Debug.Log(cord.x + " " + cord.y);
+                coordinator.Remove(cord);
+            }
+        }
+    }
+
+    private void OnDestroy()
+    {
+        tickSystem.LateTickEvent -= StartTimer;
     }
 }

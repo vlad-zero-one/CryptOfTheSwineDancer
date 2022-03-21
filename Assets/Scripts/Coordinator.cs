@@ -60,19 +60,18 @@ public class Coordinator : MonoBehaviour
         gridPlacer.Place(bomb.gameObject, coordinates);
     }
 
-    public void BombExplode(Coordinates coordinates)
+    public bool Remove(Coordinates coordinates)
     {
-        for (int x = -1; x < 2; x++)
+        if (bombsCoordinates.ContainsKey(coordinates) && bombsCoordinates[coordinates] != null)
         {
-            for (int y = -1; y < 2; y++)
-            {
-                var cord = new Coordinates((uint)((int)coordinates.x + x), (uint)((int)coordinates.y + y));
-                if (coordinatesDict.ContainsKey(cord))
-                {
-                    Destroy(coordinatesDict[cord]);
-                }
-            }
+            Destroy(bombsCoordinates[coordinates].gameObject);
         }
+        if (coordinatesDict.ContainsKey(coordinates) && coordinatesDict[coordinates] != null)
+        {
+            Destroy(coordinatesDict[coordinates]);
+            return true;
+        }
+        return false;
     }
 
     public void Move(GameObject obj, Coordinates coordinates)
