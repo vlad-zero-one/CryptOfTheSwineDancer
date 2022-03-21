@@ -96,7 +96,7 @@ public class BaseEnemy : MonoBehaviour, ITickableObject
 
     private void OnDestroy()
     {
-        tickSystem.TickEvent += RandomMove;
-        tickSystem.LateTickEvent += LookUp;
+        tickSystem.TickEvent -= RandomMove;
+        tickSystem.LateTickEvent -= LookUp;
     }
 }
