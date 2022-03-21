@@ -16,9 +16,6 @@ public class MrPorkie : MonoBehaviour, ITickableObject
     private Direction currentDirection;
     private Coordinates coordinates;
 
-    private bool bombPlaced = false;
-    private GameObject bomb;
-
     private void Start()
     {
         coordinates = new Coordinates(0, 0);
@@ -82,7 +79,6 @@ public class MrPorkie : MonoBehaviour, ITickableObject
         {
             coordinates = newCoordinates;
             coordinator.Move(gameObject, coordinates);
-            ActivateBomb();
         }
         else if (currentDirection == Direction.ToTheMoon)
         {
@@ -92,21 +88,8 @@ public class MrPorkie : MonoBehaviour, ITickableObject
 
     private void InstantiateBomb()
     {
-        if (!bombPlaced)
-        {
-            bomb = Instantiate(bombPrefab, transform.position, Quaternion.identity, bombsInHierarchy.transform);
-            bomb.GetComponent<Bomb>().PlaceBomb(coordinates);
-            bombPlaced = true;
-        }
-    }
-
-    private void ActivateBomb()
-    {
-        if (bombPlaced)
-        {
-            bomb.GetComponent<Bomb>().LightTheFuse(tickSystem, coordinator);
-            bombPlaced = false;
-        }
+        var bomb = Instantiate(bombPrefab, transform.position, Quaternion.identity, bombsInHierarchy.transform);
+        bomb.GetComponent<Bomb>().LightTheFuse(tickSystem, coordinator, coordinates);
     }
 
     private void SetDirection(Direction dir)

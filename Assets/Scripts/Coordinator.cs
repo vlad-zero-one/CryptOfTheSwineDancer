@@ -15,6 +15,8 @@ public class Coordinator : MonoBehaviour
 
     private Dictionary<Coordinates, GameObject> coordinatesDict = new Dictionary<Coordinates, GameObject>();
 
+    private Dictionary<Coordinates, Bomb> bombsCoordinates = new Dictionary<Coordinates, Bomb>();
+
     void Awake()
     {
         if (worldGrid.childCount != worldSettings.Rows || worldGrid.GetChild(0).childCount != worldSettings.CellsInRow)
@@ -49,6 +51,13 @@ public class Coordinator : MonoBehaviour
         coordinatesDict[coordinates] = obj;
 
         gridPlacer.Place(obj, coordinates);
+    }
+
+    public void SetCoordinates(Bomb bomb, Coordinates coordinates)
+    {
+        bombsCoordinates[coordinates] = bomb;
+
+        gridPlacer.Place(bomb.gameObject, coordinates);
     }
 
     public void BombExplode(Coordinates coordinates)

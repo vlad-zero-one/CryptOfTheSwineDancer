@@ -6,7 +6,7 @@ public class Bomb : MonoBehaviour, ITickableObject
 {
 
 
-    private const uint TICKS_TO_EXPLODE = 1;
+    private const uint TICKS_TO_EXPLODE = 2;
 
     private uint timer;
 
@@ -14,17 +14,15 @@ public class Bomb : MonoBehaviour, ITickableObject
     private Coordinator coordinator;
     private Coordinates coordinates;
 
-    public void PlaceBomb(Coordinates coordinates)
+    public void LightTheFuse(TickSystem tickSystem, Coordinator coordinator, Coordinates coordinates)
     {
         this.coordinates = coordinates;
-    }
-
-    public void LightTheFuse(TickSystem tickSystem, Coordinator coordinator)
-    {
         this.tickSystem = tickSystem;
         this.coordinator = coordinator;
 
         timer = TICKS_TO_EXPLODE;
+
+        coordinator.SetCoordinates(this, coordinates);
 
         SubscribeActionOnTick();
     }
@@ -39,7 +37,7 @@ public class Bomb : MonoBehaviour, ITickableObject
         // на следующий тик после старта
         if (timer + 1 == TICKS_TO_EXPLODE)
         {
-            coordinator.SetCoordinates(gameObject, coordinates);
+            //coordinator.SetCoordinates(gameObject, coordinates);
         }
         if (timer <= 0)
         {
