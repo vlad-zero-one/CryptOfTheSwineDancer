@@ -99,6 +99,7 @@ public class MrPorkie : MonoBehaviour, ITickableObject
 
     private void OnDestroy()
     {
+        tickSystem.TickEvent -= MoveOrPlaceBomb;
         coordinator.GameOver(porkieDied: true);
     }
 }
