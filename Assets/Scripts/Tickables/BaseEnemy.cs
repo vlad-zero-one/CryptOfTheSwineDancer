@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class BaseEnemy : MonoBehaviour, ITickableObject
@@ -12,6 +9,8 @@ public class BaseEnemy : MonoBehaviour, ITickableObject
     private Direction currentDirection;
     private Coordinates coordinates;
 
+    public event DirectionDelegate DirectionChangeEvent;
+
     public void Init(Coordinator coordinator, TickSystem tickSystem, Coordinates coordinates)
     {
         this.coordinator = coordinator;
@@ -19,6 +18,10 @@ public class BaseEnemy : MonoBehaviour, ITickableObject
         this.coordinates = coordinates;
 
         SubscribeActionOnTick();
+
+        GetComponent<SpriteChanger>().Init(GetComponent<SpriteRenderer>());
+
+        DirectionChangeEvent += GetComponent<SpriteChanger>().ChangeSprite;
     }
 
     public void SubscribeActionOnTick()
@@ -81,6 +84,7 @@ public class BaseEnemy : MonoBehaviour, ITickableObject
         if (coordinator.CanMoveHere(newCoordinates))
         {
             coordinates = newCoordinates;
+            DirectionChangeEvent.Invoke(currentDirection);
             return coordinates;
         }
         else
@@ -96,6 +100,8 @@ public class BaseEnemy : MonoBehaviour, ITickableObject
 
     private void OnDestroy()
     {
+        transform?.GetComponentInParent<WinChecker>()?.CheckWin();
+
         tickSystem.TickEvent -= RandomMove;
         tickSystem.LateTickEvent -= LookUp;
     }

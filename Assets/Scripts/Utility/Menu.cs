@@ -7,8 +7,16 @@ public class Menu : MonoBehaviour
 
     [SerializeField] GameObject continueButton;
 
-    public void GameOver(bool porkieDied = false)
+    [SerializeField] GameObject winObject;
+    [SerializeField] GameObject loseObject;
+
+    public void GameOver(bool porkieDied = false, bool isWin = false)
     {
+        // чтобы не вызывать функцию в случае нормального выполнение OnDestroy
+        if (!this) return;
+
+        loseObject.SetActive(!isWin);
+        winObject.SetActive(isWin);
         gameObject.SetActive(true);
         continueButton.SetActive(!porkieDied);
         controlButtons.SetActive(false);

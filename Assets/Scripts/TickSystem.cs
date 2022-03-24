@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class TickSystem : MonoBehaviour
@@ -14,6 +12,5 @@ public class TickSystem : MonoBehaviour
         TickEvent?.Invoke();
 
         LateTickEvent?.Invoke();
-        Debug.Log("Tick!");
     }
 }

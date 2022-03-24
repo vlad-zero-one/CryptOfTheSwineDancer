@@ -6,4 +6,6 @@ public class WorldSettings : ScriptableObject
     [Header("Map Size")]
     public uint Rows;
     public uint CellsInRow;
+
+    public bool UnbreakableObstacles = false;
 }

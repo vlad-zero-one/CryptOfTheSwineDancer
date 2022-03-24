@@ -46,6 +46,14 @@ public class Coordinator : MonoBehaviour
         return false;
     }
 
+    public bool IsThereBomb(Coordinates coordinates)
+    {
+        if (bombsCoordinates.ContainsKey(coordinates))
+            return bombsCoordinates[coordinates] != null;
+
+        return false;
+    }
+
     public void SetCoordinates(GameObject obj, Coordinates coordinates)
     {
         coordinatesDict[coordinates] = obj;
@@ -68,6 +76,11 @@ public class Coordinator : MonoBehaviour
         }
         if (coordinatesDict.ContainsKey(coordinates) && coordinatesDict[coordinates] != null)
         {
+            if (coordinatesDict[coordinates].GetComponent<Obstacle>()
+                && worldSettings.UnbreakableObstacles)
+            {
+                return false;
+            }
             Destroy(coordinatesDict[coordinates]);
             return true;
         }

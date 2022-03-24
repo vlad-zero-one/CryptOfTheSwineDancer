@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2869613380130940627}
   - component: {fileID: 2869613380130940628}
   - component: {fileID: 2869613380130940629}
+  - component: {fileID: -1989664023060620572}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -71,7 +72,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 2
+  m_SortingOrder: 1
   m_Sprite: {fileID: 1480917699468073914, guid: 5f03d1452df829c48ba14e2943c75b05, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -97,3 +98,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tickSystem: {fileID: 0}
   coordinator: {fileID: 0}
+--- !u!114 &-1989664023060620572
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2869613380130940630}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d9d630d92454ad40a2061a6cab15d25, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  upSprite: {fileID: 4232618656017457076, guid: 5f03d1452df829c48ba14e2943c75b05, type: 3}
+  rightSprite: {fileID: 1480917699468073914, guid: 5f03d1452df829c48ba14e2943c75b05, type: 3}
+  downSprite: {fileID: -1146434942223613854, guid: 5f03d1452df829c48ba14e2943c75b05, type: 3}
+  leftSprite: {fileID: 9118213209582376027, guid: 5f03d1452df829c48ba14e2943c75b05, type: 3}

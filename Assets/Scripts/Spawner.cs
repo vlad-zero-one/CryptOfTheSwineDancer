@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Spawner : MonoBehaviour
+public class Spawner : MonoBehaviour, IInitable
 {
     [SerializeField] private CoordinatesForSpawn coordinates;
 
@@ -12,7 +12,7 @@ public class Spawner : MonoBehaviour
 
     [SerializeField] private TickSystem tickSystem;
 
-    void Start()
+    public void Init()
     {
         foreach (var coord in coordinates.Values)
         {

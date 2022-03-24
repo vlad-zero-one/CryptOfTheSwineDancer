@@ -3,7 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MrPorkie : MonoBehaviour, ITickableObject
+public delegate void DirectionDelegate(Direction direction);
+
+public class MrPorkie : MonoBehaviour, ITickableObject, IInitable
 {
     [SerializeField] private TickSystem tickSystem;
 
@@ -13,15 +15,24 @@ public class MrPorkie : MonoBehaviour, ITickableObject
 
     [SerializeField] private GameObject bombsInHierarchy;
 
+    [SerializeField] private Coordinates startCoordinates;
+
+    [SerializeField] private BombExplodeEffector bombExplodeEffector;
+
     private Direction currentDirection;
     private Coordinates coordinates;
 
-    private void Start()
+    public event DirectionDelegate DirectionChangeEvent;
+
+    public void Init()
     {
-        coordinates = new Coordinates(0, 0);
-        coordinator.SetCoordinates(gameObject, coordinates);
+        coordinator.SetCoordinates(gameObject, startCoordinates);
 
         SubscribeActionOnTick();
+
+        GetComponent<SpriteChanger>().Init(GetComponent<SpriteRenderer>());
+
+        DirectionChangeEvent += GetComponent<SpriteChanger>().ChangeSprite;
     }
 
     public void SubscribeActionOnTick()
@@ -88,29 +99,25 @@ public class MrPorkie : MonoBehaviour, ITickableObject
 
     private void InstantiateBomb()
     {
-        var bomb = Instantiate(bombPrefab, transform.position, Quaternion.identity, bombsInHierarchy.transform);
-        bomb.GetComponent<Bomb>().LightTheFuse(tickSystem, coordinator, coordinates);
+        if (coordinator.IsThereBomb(coordinates)) return;
+
+        var bombGO = Instantiate(bombPrefab, transform.position, Quaternion.identity, bombsInHierarchy.transform);
+        var bomb = bombGO.GetComponent<Bomb>();
+        bomb.LightTheFuse(tickSystem, coordinator, coordinates);
+        bomb.BombExplodedEvent += bombExplodeEffector.Animate;
     }
 
     private void SetDirection(Direction dir)
     {
         currentDirection = dir;
+        DirectionChangeEvent.Invoke(dir);
     }
 
     private void OnDestroy()
     {
+        DirectionChangeEvent -= GetComponent<SpriteChanger>().ChangeSprite;
+
         tickSystem.TickEvent -= MoveOrPlaceBomb;
         coordinator.GameOver(porkieDied: true);
     }
-}
-
-enum Direction
-{
-    ToTheMoon,
-    Up,
-    Down,
-    Left,
-    Right,
-    
-    Count
 }
