@@ -9,13 +9,11 @@ public class InitManager : MonoBehaviour
     {
         foreach(var obj in objectsToInit)
         {
-            if (obj is IInitable)
-                ((IInitable)obj).Init();
+            if (obj is IInitable initable)
+            {
+                initable.Init();
+            }
         }
     }
 }
 
-public interface IInitable
-{
-    void Init();
-}
